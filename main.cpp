@@ -2,6 +2,9 @@
 #include <vector>
 #include <stack>
 
+
+
+
 enum CODE {
     iload,
     istore,
@@ -11,13 +14,23 @@ enum CODE {
     idiv,
     iconst,
     print,
-    halt
+    halt,
+
 
 
 };
 
+class STACK {
+public:
+    std::stack <int> operandStack;
+    std::stack <int> callstack;
+
+};
+
 int main() {
-    std::stack<int> operandStack;
+    STACK stack;
+
+
     bool running = true;
 
     std ::vector<int> code = {
@@ -36,6 +49,49 @@ int main() {
     while (running) {
         int opcode = code[pc++];
         switch (opcode) {
+            case iconst: {
+                int value = code[pc++];
+                stack.operandStack.push(value);
+                break;
+            }
+            case istore: {
+                int value = code[pc++];
+                stack.operandStack.pop();
+                localvars [value] =stack.operandStack.top();
+
+                }
+            case iload :{
+                int value = code[pc++];
+                stack.operandStack.push(localvars [value]);
+                break;
+
+
+
+
+            }
+            case iadd : {
+                int a = stack.operandStack.top();
+                stack.operandStack.pop();
+                int b = stack.operandStack.top();
+                stack.operandStack.pop();
+                stack.operandStack.push(a + b);
+                break;
+
+
+
+            }
+            case print: {
+                std::cout << stack.operandStack.top() << std::endl;
+                stack.operandStack.pop();
+                break;
+            }
+                case halt: {
+                    running = false;
+                    break;
+                }
+
+
+
 
 
         }
