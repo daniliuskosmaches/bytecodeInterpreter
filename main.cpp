@@ -8,6 +8,9 @@ class Loader {
     enum INTOPCODE {
 
     };
+    enum LONGOPCOE {
+
+    };
     enum FLOATOPCODE {
 
     };
@@ -15,6 +18,14 @@ class Loader {
 
 
     };
+    enum ARITHMETICOPCODE {
+        iadd,
+        isub,
+        imul,
+        idiv
+    };
+
+
     enum CONTROLFLOW {
         jmp,
         jz,
