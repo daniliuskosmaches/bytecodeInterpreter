@@ -7,7 +7,7 @@ using namespace std;
 
 
 
-class Loader {
+class LOADER {
 
 
 
@@ -155,6 +155,11 @@ public:
 
 
 };
+class HEAP {
+    vector <int> heapMemory;
+
+
+};
 
 
 
@@ -172,7 +177,7 @@ public:
 
 int main() {
     STACK stack;
-    Loader loader;
+    LOADER loader;
 
 
 
@@ -184,41 +189,61 @@ int main() {
         int opcode = loader.intcode[loader.pc++];
         //int
         switch (opcode) {
-            case Loader::iload: {
+            case LOADER::iload: {
                 int index = loader.intcode[loader.pc++];
                 stack.operandStack.push(localvars[index]);
             }
-            case Loader::istore: {
+            case LOADER::istore: {
                 int index = loader.intcode[loader.pc++];
                 localvars[index] = stack.operandStack.top();
                 stack.operandStack.pop();
             }
-                case
-
-
-
-
-
-
+            case LOADER :: iconst : {
+                int value = loader.intcode[loader.pc++];
+                stack.operandStack.push(value);
+            }
+            case LOADER:: iadd : {
+                int a = stack.operandStack.top();
+                int b = stack.operandStack.top();
+                stack.operandStack.pop();
+                stack.operandStack.pop();
+                stack.operandStack.push(a + b);
 
 
             }
+            case LOADER:: isub: {
+                int a = stack.operandStack.top();
+                int b = stack.operandStack.top();
+                stack.operandStack.pop();
+                stack.operandStack.pop();
+                stack.operandStack.push(a - b);
+
+            }
+            case LOADER::imultipl: {
+                int a = stack.operandStack.top();
+                int b = stack.operandStack.top();
+                stack.operandStack.pop();
+                stack.operandStack.pop();
+                stack.operandStack.push(a * b);
+            }
+            case LOADER::idiv: {
+                int a = stack.operandStack.top();
+                int b = stack.operandStack.top();
+                stack.operandStack.pop();
+                stack.operandStack.pop();
+                if (b == 0) {
+                    cerr << "Error: Division by zero" << endl;
+                    return 1;
+                }
+                stack.operandStack.push(a/b );
+            }
+            case LOADER::iprint : {
+                int value = stack.operandStack.top();
+                stack.operandStack.pop();
+                cout << value << endl;
+            }
 
 
-
-
-
-        }
-
-
-
-
-
-
-
-
-
-                
 
 
 
@@ -226,4 +251,13 @@ int main() {
 
         }
     }
+
+
+
+
+return 0;
+
+
+}
+
 
