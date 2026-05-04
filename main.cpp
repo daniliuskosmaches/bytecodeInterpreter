@@ -1,14 +1,43 @@
 #include <iostream>
 #include <vector>
 #include <stack>
+#include  <string>
+using namespace std;
+
 
 
 
 class Loader {
+
+
+
+
+public:
     enum INTOPCODE {
+        iload,
+        istore,
+        iconst,
+        iadd,
+        isub,
+        imultipl,
+        idiv,
+        iprint,
+        ihalt,
+
+
 
     };
     enum LONGOPCOE {
+        lload,
+        lstore,
+        lconst,
+        ladd,
+        lsub,
+        lmultipl,
+        ldiv,
+        lprint,
+        lhalt,
+
 
     };
     enum FLOATOPCODE {
@@ -18,12 +47,7 @@ class Loader {
 
 
     };
-    enum ARITHMETICOPCODE {
-        iadd,
-        isub,
-        imul,
-        idiv
-    };
+
 
 
     enum CONTROLFLOW {
@@ -63,11 +87,8 @@ class Loader {
         dataMemory,
         stackMemory
     };
-    enum REGISTER {
-        pc,
-        sp,
-        bp
-    };
+
+
 enum TYPE {
     INT,
     FLOAT,
@@ -125,7 +146,8 @@ enum TYPE {
 
 
 public:
-    std::vector<int> code;
+    int pc = 0;
+    std::vector<int> intcode;
 
 
 
@@ -136,19 +158,10 @@ public:
 
 
 
-enum CODE {
-    iload,
-    istore,
-    iadd,
-    isub,
-    imul,
-    idiv,
-    iconst,
-    print,
-    halt,
 
 
-};
+
+
 
 class STACK {
 public:
@@ -159,68 +172,46 @@ public:
 
 int main() {
     STACK stack;
+    Loader loader;
 
 
-    bool running = true;
 
-    std ::vector<int> code = {
-        iconst, 10,
-        istore, 0,
-        iconst, 20,
-        istore, 1,
-        iload, 0,
-        iload, 1,
-        iadd ,
-        print,
-        halt
-    };
+
+
     std::vector<int> localvars(10, 0);
-    int pc = 0;
-    while (running) {
-        int opcode = code[pc++];
+
+    while (loader.pc < loader.intcode.size()) {
+        int opcode = loader.intcode[loader.pc++];
+        //int
         switch (opcode) {
-            case iconst: {
-                int value = code[pc++];
-                stack.operandStack.push(value);
-                break;
+            case Loader::iload: {
+                int index = loader.intcode[loader.pc++];
+                stack.operandStack.push(localvars[index]);
             }
-            case istore: {
-                int value = code[pc++];
-                localvars [value] =stack.operandStack.top();
+            case Loader::istore: {
+                int index = loader.intcode[loader.pc++];
+                localvars[index] = stack.operandStack.top();
                 stack.operandStack.pop();
-                break;
+            }
+                case
 
 
-                }
-            case iload :{
-                int value = code[pc++];
-                stack.operandStack.push(localvars [value]);
-                break;
+
+
 
 
 
 
             }
-            case iadd : {
-                int a = stack.operandStack.top();
-                stack.operandStack.pop();
-                int b = stack.operandStack.top();
-                stack.operandStack.pop();
-                stack.operandStack.push(a + b);
-                break;
 
 
 
-            }
-            case print: {
-                std::cout << stack.operandStack.top() << std::endl;
-                stack.operandStack.pop();
-                break;
-            }
-                case halt: {
-                    running = false;
-                    break;
-                }
+
+
+        }
+
+
+
 
 
 
@@ -235,4 +226,4 @@ int main() {
 
         }
     }
-}
+
