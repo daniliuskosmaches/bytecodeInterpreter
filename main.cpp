@@ -8,10 +8,6 @@ using namespace std;
 
 
 class LOADER {
-
-
-
-
 public:
     enum INTOPCODE {
         iload,
@@ -23,9 +19,6 @@ public:
         idiv,
         iprint,
         ihalt,
-
-
-
     };
     enum LONGOPCOE {
         lload,
@@ -36,20 +29,11 @@ public:
         lmultipl,
         ldiv,
         lprint,
-        lhalt,
-
-
-    };
+        lhalt,};
     enum FLOATOPCODE {
 
     };
-    enum STRINGOPCODE {
-
-
-    };
-
-
-
+    enum STRINGOPCODE {};
     enum CONTROLFLOW {
         jmp,
         jz,
@@ -57,12 +41,9 @@ public:
         call,
         ret
     };
-    enum IOOPCODE {
-
-    };
+    enum IOOPCODE {};
     enum HALTOPCODE {
-        halt
-    };
+        halt};
     enum OP {
         INTOPCODE,
         FLOATOPCODE,
@@ -135,39 +116,47 @@ enum TYPE {
     };
     enum HEAP {
         OBJECT_ALLOCATION,
-        GARBAGE_COLLECTION
-
-
-
-
-    };
-
-
-
-
+        GARBAGE_COLLECTION};
 public:
     int pc = 0;
     std::vector<int> intcode;
-
-
-
-
-
-
 };
+struct BaseObject {
+    bool marked = false;
+
+    int type = 0;
+
+    virtual ~BaseObject() {
+        std::cout << "Object destroyed\n";
+    }
+};
+// if you are declaring struct after class and you want to use that struct in class, you need to forward declare the struct before the class definition. This allows the class to recognize the struct type when it is used as a pointer or reference within the class. In this case, we have declared the `BaseObject` struct after the `HEAP` class, so we need to forward declare it before the `HEAP` class definition.
 class HEAP {
     vector <int> heapMemory;
+    /**
+     * @brief A collection of pointers to objects derived from the BaseObject class.
+     *
+     * This vector is used to manage dynamically allocated objects in the context
+     * of the program, allowing for organized storage and retrieval. The objects
+     * stored in this collection are typically instances or derivations of the
+     * `BaseObject` class.
+     */
 
+    std::vector<BaseObject*> allObjects;
+
+    BaseObject* allocate() {
+        BaseObject* obj = new BaseObject();
+        allObjects.push_back(obj);
+        return obj;
+    }
+    //constructor
+    ~HEAP() {
+        for (BaseObject* obj : allObjects) {
+            delete obj;
+        }
+    }
 
 };
-
-
-
-
-
-
-
-
 class STACK {
 public:
     std::stack <int> operandStack;
@@ -178,11 +167,6 @@ public:
 int main() {
     STACK stack;
     LOADER loader;
-
-
-
-
-
     std::vector<int> localvars(10, 0);
 
     while (loader.pc < loader.intcode.size()) {
@@ -242,22 +226,9 @@ int main() {
                 stack.operandStack.pop();
                 cout << value << endl;
             }
-
-
-
-
-
-
-
         }
     }
-
-
-
-
 return 0;
-
-
 }
 
 
